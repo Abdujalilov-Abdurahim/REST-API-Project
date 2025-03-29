@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App\QueryFilter\QueryFilter;
 
 class Product extends Model
 {
@@ -30,5 +32,10 @@ class Product extends Model
     public function region()
     {
         return $this->belongsTo(Region::class);
+    }
+
+    public function scopeFilter(Builder $query, QueryFilter $queryFilter)
+    {
+        return $queryFilter->apply($query);
     }
 }

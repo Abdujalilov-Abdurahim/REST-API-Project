@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\QueryFilter\ProductFilter;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -15,9 +16,11 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ProductResource::collection(Product::all());
+        $filters = $request->all();
+        $products = Product::filter(new ProductFilter(Product::query(), $filters))->paginate(10);
+        return ProductResource::collection($products);
     }
 
     /**
@@ -55,14 +58,6 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Product deleted'
         ]);
-    }
-
-    /**
-     * Filter the specified resource from storage.
-     */
-    public function filter(Request $request, ProductService $productService)
-    {
-       //
     }
     
 }
