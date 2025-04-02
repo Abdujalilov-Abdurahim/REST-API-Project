@@ -30,8 +30,12 @@ class ProductFilter extends QueryFilter
         }
     }
 
-    public function title($value)
+    public function search($value)
     {
-        $this->builder->where("title", "like", "%".$value."%");
+        $this->builder->where(function ($query) use ($value) {
+            $query->where("title", "like", "%$value%")
+                ->orWhere("body", "like", "%$value%")
+                ->orWhere("address", "like", "%$value%");
+        });
     }
 }
