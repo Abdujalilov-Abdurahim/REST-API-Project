@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $registerRequest)
     {
-        return User::create($request->all());
+        return User::create($registerRequest->all());
     }
 
     public function login(LoginRequest $request)
